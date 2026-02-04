@@ -4,5 +4,4 @@ Objetivo general:
 Por desarrollar
 
 Tecnologias a utilizar
-Laravel
-Jetstrem
+Laravel, Jetstream y Livewire

@@ -67,7 +67,7 @@
             </ul>
             @else
             <a href="{{ $link['href'] }}" class="flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group {{ $link['active'] ? 'bg-red-100' : '' }}">
-               <span class="w-6 h6 inline-flex items-center justify-center text-gray-500">
+               <span class="w-6 h-6 inline-flex items-center justify-center text-gray-500">
                      <i class="{{ $link['icon'] }}"></i>
                </span>
                <span class="ms-3">{{$link['name']}}</span>

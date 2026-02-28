@@ -16,6 +16,8 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <script src="https://kit.fontawesome.com/01b3306851.js" crossorigin="anonymous"></script>
 
+        <!-- Sweet alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
         <!-- Scripts -->
@@ -25,6 +27,7 @@
         <wireui:scripts />
         <!-- Styles -->
         @livewireStyles
+
     </head>
     <body class="font-sans antialiased bg-gray-100">
 
@@ -33,9 +36,14 @@
         @include('layouts.includes.admin.sidebar')
         
 <div class="p-4 sm:ml-64 mt-14">
-   <div class="mt-14">
+   <div class="mt-14 flex justify-between items-center w-full">
     <div class="mt-14 flex items-center justify-between w-full">
      @include('layouts.includes.admin.breadcrumb')
+        @isset($action)
+        <div>
+            {{ $action }}
+        </div>
+        @endif
      </div>
    </div>
     {{ $slot }}
@@ -46,5 +54,12 @@
 
         @livewireScripts
         <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
+
+                <!-- Mostrar sweet alert -->
+        @if(session('swal'))
+        <script>
+            Swal.fire(@json(session('swal')));
+        </script>
+        @endif
     </body>
 </html>

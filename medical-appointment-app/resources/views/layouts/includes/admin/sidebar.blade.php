@@ -8,28 +8,14 @@
       'active' => request()->routeIs('admin.dashboard'),
    ],
    [
-      'header' => 'Administracion',
+      'header' => 'Gestión',
    
    ],
      [
-      'name' => 'Tienda en linea',
-      'icon' => 'fa-solid  fa-user',
-      'href' => route('admin.dashboard'),
-      'active' => request()->routeIs('admin.dashboard'),
-      'submenu' => [
-         ['name' => 'Productos',
-         'href'=> '#',
-         'active' => false,
-         ],
-         ['name' => 'Categorias',
-         'href'=> '#',
-         'active' => false,
-         ],
-         ['name' => 'Ventas',
-         'href'=> '#',
-         'active' => false,
-         ],
-      ]
+      'name' => 'Roles y Servicios',
+      'icon' => 'fa-solid  fa-shield-halved',
+      'href' => route('admin.roles.index'),
+      'active' => request()->routeIs('admin.roles.*'),
    ],
 ];
 

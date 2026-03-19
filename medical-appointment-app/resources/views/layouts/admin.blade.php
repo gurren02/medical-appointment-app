@@ -11,21 +11,17 @@
 
         <title>{{ $title }}</title>
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <script src="https://kit.fontawesome.com/01b3306851.js" crossorigin="anonymous"></script>
 
-        <!-- Sweet alert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 
         <wireui:scripts />
-        <!-- Styles -->
         @livewireStyles
 
     </head>
@@ -55,11 +51,32 @@
         @livewireScripts
         <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
 
-                <!-- Mostrar sweet alert -->
-        @if(session('swal'))
+                @if(session('swal'))
         <script>
             Swal.fire(@json(session('swal')));
         </script>
         @endif
+
+        <script>
+            document.addEventListener('submit', function(e) {
+                if (e.target && e.target.classList.contains('delete-form')) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "Esta acción no se puede deshacer.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            e.target.submit();
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

@@ -15,12 +15,12 @@
         <form action="{{ route('admin.patients.update', $patient) }}" method="POST">
             @csrf
             @method('PUT')
-            <x-wire-card>
+            <x-wire-card class="mb-8">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center">
                         <img src="{{$patient->user ->profile_photo_url}}" alt="{{$patient->user->name}}" class="h-20 w-20 rounded-full object-cover object-center">
                         <div class="ml-4">
-                            <p class="text-2x1 font-bold text-gray-900">{{$patient->user->name}}</p>
+                            <p class="text-2xl font-bold text-gray-900">{{$patient->user->name}}</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
@@ -121,18 +121,69 @@
                           </div>
                         </div>
                     </div>
+                    <div class="grid lg:grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-gray-500 font-semibold">Teléfono</span>
+                            <span class="texte-gray-900 text-sm ml-1">{{ $patient->user->phone }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 font-semibold">Email</span>
+                            <span class="texte-gray-900 text-sm ml-1">{{ $patient->user->email }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 font-semibold">Dirección</span>
+                            <span class="texte-gray-900 text-sm ml-1">{{ $patient->user->address }}</span>
+                        </div>
+                    </div>
                 </div>
                 {{-- Tab 2: Antecedentes --}}
-                <div x-show="tab == 'antecedentes'">
-                    <p>Antecedentes</p>
+                <div x-show="tab == 'antecedentes'" style="display: none;">
+                    <div class="grid lg:grid-cols-2 gap-4">
+                        <div>
+                            <x-wire-textarea label="Alergias conocidas" name="allergies">
+                                {{ old('allergies', $patient->allergies)}}
+                            </x-wire-textarea>
+                        </div>
+                        <div>
+                            <x-wire-textarea label="Enfermedades crónicas" name="chronic_conditions">
+                                {{ old('chronic_conditions', $patient->chronic_conditions)}}
+                            </x-wire-textarea>
+                        </div>
+                        <div>
+                            <x-wire-textarea label="Antecendentes quirúrgicos" name="surgical_history">
+                                {{ old('surgical_history', $patient->surgical_history)}}
+                            </x-wire-textarea>
+                        </div>
+                        <div>
+                            <x-wire-textarea label="Antecedentes familiares" name="family_history">
+                                {{ old('family_history',
+                                    $patient->family_history)}}
+                            </x-wire-textarea>
+                        </div>
+                    </div>
                 </div>
                 {{-- Tab 3: Informacion general --}}
-                <div x-show="tab == 'informacion-general'">
-                    <p>Informacion general</p>
+                <div x-show="tab == 'informacion-general'" style="display: none;">
+                    <x-wire-native-select label="Tipo de sangre" class="mb-4" name="blood_type_id">
+                        <option value="">Selecciona el tipo de sangre</option>
+                        @foreach ($bloodTypes as $bloodType)
+                            <option value="{{$bloodType->id}}" @selected(old('blood_type_id', $patient->blood_type_id)== $bloodType->id))>{{ $bloodType->name}}</option>
+                        @endforeach
+                    </x-wire-native-select>
+                    <x-wire-textarea label="Observaciones" name="observations">
+                        {{ old('observations', $patient->observations)}}
+                    </x-wire-textarea>
                 </div>
                 {{-- Tab 4: Contacto de emergencia --}}
-                <div x-show="tab == 'contacto-emergencia'">
-                    <p>Contacto de emergencia</p>
+                <div x-show="tab == 'contacto-emergencia'" style="display: none;">
+                    <div class="space-y-4">
+                    <x-wire-input label="Nombre de contacto" name="emergency_contact_name" value="{{ old('emergency_contact_name', $patient->emergency_contact_name)}}">
+                    </x-wire-input>
+                    <x-wire-phone label="Telefono de contacto" name="emergency_contact_phone" value="{{ old('emergency_contact_phone', $patient->emergency_contact_phone)}}" mask="(###) ###-###" placeholder="(999) 999-999">
+                    </x-wire-phone>
+                    <x-wire-input label="Realción con el contacto" name="emergency_contact_relationship" value="{{ old('emergency_contact_relationship', $patient->emergency_contact_relationship)}}" placeholder="Familiar, Amigo, etc.">
+                    </x-wire-input>
+                    </div>
                 </div>
             </div>
             </div>

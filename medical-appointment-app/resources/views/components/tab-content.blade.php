@@ -1,5 +1,5 @@
-@props(['tab','error' => false])
+@props(['tab'])
 
-<div x-show="tab === '{{$tab}}'" style="display: none">
+<div x-show="tab == '{{$tab}}'" style="display: none">
     {{ $slot }}
 </div>

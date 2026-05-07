@@ -149,7 +149,7 @@
                         <x-wire-native-select label="Tipo de sangre" class="mb-4" name="blood_type_id">
                             <option value="">Selecciona el tipo de sangre</option>
                             @foreach ($bloodTypes as $bloodType)
-                                <option value="{{$bloodType->id}}" @selected(old('blood_type_id', $patient->blood_type_id)== $bloodType->id))>{{ $bloodType->name}}</option>
+                                <option value="{{$bloodType->id}}" @selected(old('blood_type_id', $patient->blood_type_id) == $bloodType->id)>{{ $bloodType->name}}</option>
                             @endforeach
                         </x-wire-native-select>
                         <x-wire-textarea label="Observaciones" name="observations">

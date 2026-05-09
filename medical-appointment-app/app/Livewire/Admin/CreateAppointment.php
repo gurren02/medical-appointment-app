@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Jobs\SendAppointmentNotifications;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
@@ -72,7 +73,7 @@ class CreateAppointment extends Component
         $startTime = Carbon::parse($this->selectedTime);
         $endTime = $startTime->copy()->addMinutes($this->selectedDuration);
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'doctor_id' => $this->selectedDoctorId,
             'patient_id' => $this->patientId,
             'date' => $this->selectedDate,
@@ -82,6 +83,8 @@ class CreateAppointment extends Component
             'reason' => $this->reason,
             'status' => 1, // Programado
         ]);
+
+        SendAppointmentNotifications::dispatch($appointment);
 
         session()->flash('swal', [
             'icon' => 'success',

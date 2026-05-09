@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendAppointmentNotifications;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\Doctor;
@@ -47,7 +48,9 @@ class AppointmentController extends Controller
         $end = \Carbon\Carbon::createFromFormat('H:i', $data['end_time']);
         $data['duration'] = $start->diffInMinutes($end);
 
-        Appointment::create($data);
+        $appointment = Appointment::create($data);
+
+        SendAppointmentNotifications::dispatch($appointment);
 
         session()->flash('swal', [
             'icon' => 'success',

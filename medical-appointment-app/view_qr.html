@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthify - Conectar WhatsApp</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 { color: #128c7e; margin-bottom: 0.5rem; }
+        p { color: #666; margin-bottom: 1.5rem; }
+        #qr-container {
+            min-height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            background: #fafafa;
+        }
+        img { max-width: 100%; height: auto; }
+        .status {
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .status.waiting { background: #fff3cd; color: #856404; }
+        .status.connected { background: #d4edda; color: #155724; }
+        .btn {
+            background: #128c7e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #075e54; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Conectar WhatsApp</h1>
+        <p>Escanea el código QR desde tu aplicación de WhatsApp para activar las notificaciones de Healthify.</p>
+        
+        <div id="qr-container">
+            <p id="message">Cargando código QR...</p>
+        </div>
+
+        <div id="status-container">
+            <span class="status waiting">Esperando conexión...</span>
+        </div>
+        <br>
+        <button class="btn" onclick="fetchQR()">Actualizar QR</button>
+    </div>
+
+    <script>
+        const API_KEY = '4224702241-4c3a-1011-911c-1c0c2121';
+        const INSTANCE = 'Healthify';
+        const URL = `http://localhost:8080/instance/connect/${INSTANCE}`;
+
+        async function fetchQR() {
+            const container = document.getElementById('qr-container');
+            const message = document.getElementById('message');
+            
+            try {
+                message.innerText = 'Obteniendo QR...';
+                const response = await fetch(URL, {
+                    headers: { 'apikey': API_KEY }
+                });
+                const data = await response.json();
+
+                if (data.base64) {
+                    container.innerHTML = `<img src="${data.base64}" alt="WhatsApp QR Code">`;
+                    document.querySelector('.status').innerText = 'QR Generado - Escanea ahora';
+                } else if (data.status === 'connected' || data.instance?.status === 'open') {
+                    container.innerHTML = '<p style="color: #155724;">✅ ¡WhatsApp Conectado!</p>';
+                    document.querySelector('.status').className = 'status connected';
+                    document.querySelector('.status').innerText = 'CONECTADO';
+                } else {
+                    message.innerText = 'El QR no está listo. Reintenta en unos segundos.';
+                }
+            } catch (err) {
+                message.innerText = 'Error al conectar con la API. Asegúrate de que Docker esté corriendo.';
+                console.error(err);
+            }
+        }
+
+        // Cargar al inicio
+        fetchQR();
+        // Reintentar cada 20 segundos
+        setInterval(fetchQR, 20000);
+    </script>
+</body>
+</html>
